@@ -21,7 +21,7 @@ app.listen(3000, () => console.log("server is listening on port 3000"));
 
 // handeling routing request
 app.use("/test", userRouter);
-app.use("/signup", authRouter);
+app.use("/api/auth", authRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
