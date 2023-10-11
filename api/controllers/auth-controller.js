@@ -3,7 +3,8 @@ import bcryptjs from "bcryptjs";
 
 export const userAuth = async (req, res, next) => {
   const { username, email, password } = req.body;
-  const hashPassword = bcryptjs.hashSync(password, 10);
+  const salt = bcryptjs.genSaltSync(10);
+  const hashPassword = await bcryptjs.hash(password, salt);
   const newUser = new User({
     username: username,
     email: email,
