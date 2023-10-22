@@ -13,6 +13,7 @@ import {
   userDeleteFailure,
   userDeleteStart,
   userDeleteSuccess,
+  userSignOutStart,
   userUpdateFailure,
   userUpdateStart,
   userUpdateSuccess,
@@ -83,11 +84,11 @@ export default function Profile() {
       dispatch(userUpdateFailure(error.message));
     }
   };
-  const handleDeleteUser = async() => {
+  const handleDeleteUser = async () => {
     try {
       dispatch(userDeleteStart());
       const res = await fetch(`/api/user/delete/${user.currentUser._id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
       const data = await res.json();
       if (data.success === false) {
@@ -95,12 +96,25 @@ export default function Profile() {
         return;
       }
       dispatch(userDeleteSuccess(data));
-      navigate('/sign-in')
-
+      navigate("/sign-in");
     } catch (error) {
-      dispatch(userDeleteFailure(error.message))
+      dispatch(userDeleteFailure(error.message));
     }
-  }
+  };
+  const handleUserSignOut = async () => {
+    try {
+      dispatch(userSignOutStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(userDeleteFailure(data.message));
+      }
+      dispatch(userDeleteSuccess(data));
+      navigate("/sign-in");
+    } catch (error) {
+      dispatch(userDeleteFailure(error.message));
+    }
+  };
   // Firebase storage
   //  allow read;
   //  allow write: if
@@ -159,13 +173,26 @@ export default function Profile() {
           id="password"
           onChange={handleChange}
         />
-        <button disabled={loading} className="bg-slate-700 rounded-lg p-3 text-white uppercase hover:opacity-95 disabled:opacity-95">
+        <button
+          disabled={loading}
+          className="bg-slate-700 rounded-lg p-3 text-white uppercase hover:opacity-95 disabled:opacity-95"
+        >
           {loading ? "loading..." : "update profile"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-500 cursor-pointer" onClick={handleDeleteUser}>Delete account</span>
-        <span className="text-red-500 cursor-pointer">Sign In</span>
+        <span
+          className="text-red-500 cursor-pointer"
+          onClick={handleDeleteUser}
+        >
+          Delete account
+        </span>
+        <span
+          className="text-red-500 cursor-pointer"
+          onClick={handleUserSignOut}
+        >
+          Sign Out
+        </span>
       </div>
       <p className="text-red-700">{error ? error : ""}</p>
       <p className="text-green-700">

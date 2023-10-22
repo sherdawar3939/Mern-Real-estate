@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import Jwt from "jsonwebtoken";
 
-export const signup = async (req, res, next) => {
+export const signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
   const salt = bcryptjs.genSaltSync(10);
   const hashPassword = await bcryptjs.hash(password, salt);
@@ -20,7 +20,7 @@ export const signup = async (req, res, next) => {
   }
 };
 
-export const signin = async (req, res, next) => {
+export const signIn = async (req, res, next) => {
   const { password, email } = req.body;
   try {
     const validUser = await User.findOne({ email });
@@ -53,8 +53,9 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8);
       const hashPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUser = new User({
-        username: req.body.name.split(" ").join(" ").toLowerCase() +
-        Math.random().toString(36).slice(-4),
+        username:
+          req.body.name.split(" ").join(" ").toLowerCase() +
+          Math.random().toString(36).slice(-4),
         email: req.body.email,
         password: hashPassword,
         avatar: req.body.photo,
@@ -67,6 +68,14 @@ export const google = async (req, res, next) => {
         .status(200)
         .json(rest);
     }
+  } catch (error) {
+    next(error);
+  }
+};
+export const signOut = async (req, res, next) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("user sign out successfully");
   } catch (error) {
     next(error);
   }
