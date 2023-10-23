@@ -8,7 +8,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   userDeleteFailure,
   userDeleteStart,
@@ -179,6 +179,9 @@ export default function Profile() {
         >
           {loading ? "loading..." : "update profile"}
         </button>
+        <Link className="bg-green-700 text-white p-3 rounded-lg text-center hover:opacity-95 uppercase" to={"/create-listing"}>
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span
