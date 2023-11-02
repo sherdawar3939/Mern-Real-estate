@@ -13,7 +13,7 @@ export default function Header() {
     const urlParmas = new URLSearchParams(window.location.search);
     urlParmas.set("searchTerm", searchTerm);
     const searchQuery = urlParmas.toString();
-    navigate(`/searchTerm?${searchQuery}`);
+    navigate(`/search?${searchQuery}`);
   };
   useEffect(() => {
     const urlParmas = new URLSearchParams(location.search);
